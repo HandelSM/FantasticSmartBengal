@@ -177,7 +177,6 @@ void playSound(String text, int delayTimeMs) {
   String antesPonto, depoisPonto;
 
   if ((c >= '1' && c <= '9') && sizeText > 1 && indicePonto != -1) {
-      Serial.println("CAI DENTRO DO IF");
       antesPonto = text.substring(0, indicePonto);
       depoisPonto = text.substring(indicePonto + 1, sizeText);
       
