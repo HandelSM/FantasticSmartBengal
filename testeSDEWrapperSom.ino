@@ -1,8 +1,8 @@
 #include "DFPlayerMini.h"
 
 #define BUSYPIN 7
-#define RXPIN 6
-#define TXPIN 5
+#define RXPIN 10
+#define TXPIN 11
 
 DFPlayerMini player;
 
