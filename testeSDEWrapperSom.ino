@@ -170,22 +170,42 @@ void playMiscSound(String text, int delayTimeMs = 0) {
 
 }
 
-//Use apenas essa função (ou melhore-a), já que ela é uma wrapper das duas acima. 
-void playSound(byte num = 0, String text = "", int delayTimeMs = 0) {
-  if (num > 0 && text.charAt(0) == "X") {
-    Serial.println("Erro: Apenas numeros OU textos devem ser passados para esta funcao.");
-    return;
+void playSound(String text, int delayTimeMs) {
+  char c = text.charAt(0);
+  int sizeText = text.length();
+  int indicePonto = text.indexOf('.');
+  String antesPonto, depoisPonto;
+
+  if ((c >= '1' && c <= '9') && sizeText > 1 && indicePonto != -1) {
+      Serial.println("CAI DENTRO DO IF");
+      antesPonto = text.substring(0, indicePonto);
+      depoisPonto = text.substring(indicePonto + 1, sizeText);
+      
+      playSoundBlackBox(antesPonto, delayTimeMs);
+      playSoundBlackBox("P", delayTimeMs);
+      playSoundBlackBox(depoisPonto, delayTimeMs);
+   }
+
+
+  else {
+    playSoundBlackBox(text, delayTimeMs);
   }
+}
 
-  if (num > 0) {
-    if (num < 10) {
-      playSound1To9(num, delayTimeMs);
+void playSoundBlackBox(String text, int delayTimeMs) {
+  char c = text.charAt(0);
+  if (text.length() == 1) {
+    if (c >= '1' && c <= '9') {
+       playSound1To9(c - '0');
     }
-
     else {
-      playSound10To90(num, delayTimeMs);
+      playMiscSound(text, delayTimeMs);
     }
   }
+
+  else if (c >= '1' && c <= '9') {
+       playSound10To90(byte(text.substring(0, 2).toInt()), delayTimeMs);
+    }
 
   else {
     playMiscSound(text, delayTimeMs);
@@ -193,21 +213,14 @@ void playSound(byte num = 0, String text = "", int delayTimeMs = 0) {
 }
 
 void loop() {
-  byte v1[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30, 40, 50, 60, 70, 80, 90};
-  String v2[] = {"cm", "mt", "C", "D", "S", "O", "P", "R", "l", "a", "G", "B", "n", "v", "b", "p", "c"};
-
+  String v[] = {"1.9", "2.30", "20.50", "1", "2", "O"};
   int i;
-  int size1, size2;
+  int size1;
 
-  size1 = sizeof(v1)/sizeof(byte);
-  size2 = sizeof(v2)/sizeof(String);
-
+  size1 = sizeof(v)/sizeof(String);
+ 
   for (i = 0; i < size1; i++) {
-    playSound(v1[i], "X", 1000);
-  }
-
-  for (i = 0; i < size2; i++) {
-    playSound(0, v2[i], 0);
+    playSound(v[i], 1000);
   }
   
 }
