@@ -1,8 +1,8 @@
 #include "DFPlayerMini.h"
 
 #define BUSYPIN 7
-#define RXPIN 10
-#define TXPIN 11
+#define RXPIN 6
+#define TXPIN 5
 
 DFPlayerMini player;
 
@@ -192,6 +192,7 @@ void playSound(String text, int delayTimeMs) {
 }
 
 void playSoundBlackBox(String text, int delayTimeMs) {
+  byte num;
   char c = text.charAt(0);
   if (text.length() == 1) {
     if (c >= '1' && c <= '9') {
@@ -203,7 +204,11 @@ void playSoundBlackBox(String text, int delayTimeMs) {
   }
 
   else if (c >= '1' && c <= '9') {
-       playSound10To90(byte(text.substring(0, 2).toInt()), delayTimeMs);
+       num = byte(text.substring(0, 2).toInt());
+       playSound10To90(num, delayTimeMs);
+       if ((num % 10) != 0) {
+        playSound1To9(num%10, delayTimeMs);
+       }
     }
 
   else {
@@ -212,7 +217,7 @@ void playSoundBlackBox(String text, int delayTimeMs) {
 }
 
 void loop() {
-  String v[] = {"1.9", "2.30", "20.50", "1", "2", "O"};
+  String v[] = {"1.9", "2.30", "20.50", "22.55", "12.17", "1", "2", "O"};
   int i;
   int size1;
 
