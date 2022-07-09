@@ -12,45 +12,16 @@ void setup() {
 }
 
 void playSound10To90(byte num, int delayTimeMs = 0) {
-  switch (num) {
-    case 10:
-      player.playFileAndWait(10, 0, 0, DFPLAYER_WAIT_TIMEOUT);
-      delay(delayTimeMs);
-      break;
-    case 20:
-      player.playFileAndWait(11, 0, 0, DFPLAYER_WAIT_TIMEOUT);
-      delay(delayTimeMs);
-      break;
-    case 30:
-      player.playFileAndWait(12, 0, 0, DFPLAYER_WAIT_TIMEOUT);
-      delay(delayTimeMs);
-      break;
-    case 40:
-      player.playFileAndWait(13, 0, 0, DFPLAYER_WAIT_TIMEOUT);
-      delay(delayTimeMs);
-      break;
-    case 50:
-      player.playFileAndWait(14, 0, 0, DFPLAYER_WAIT_TIMEOUT);
-      delay(delayTimeMs);
-      break;
-    case 60:
-      player.playFileAndWait(15, 0, 0, DFPLAYER_WAIT_TIMEOUT);
-      delay(delayTimeMs);
-      break;
-    case 70:
-      player.playFileAndWait(16, 0, 0, DFPLAYER_WAIT_TIMEOUT);
-      delay(delayTimeMs);
-      break;
-    case 80:
-      player.playFileAndWait(17, 0, 0, DFPLAYER_WAIT_TIMEOUT);
-      delay(delayTimeMs);
-      break;
-    case 90:
-      player.playFileAndWait(18, 0, 0, DFPLAYER_WAIT_TIMEOUT);
-      delay(delayTimeMs);
-      break;
-    default:
-      Serial.println("Erro: numero valido nao detectado.");
+  if (num != 10) {
+    player.playFileAndWait(byte(num/10) + 9, 0, 0, DFPLAYER_WAIT_TIMEOUT);
+  }
+  
+  else if (num == 10) {
+    player.playFileAndWait(10, 0, 0, DFPLAYER_WAIT_TIMEOUT);
+  }
+  
+  else {
+    Serial.println("Erro: numero valido nao detectado.");
   }
 }
 
