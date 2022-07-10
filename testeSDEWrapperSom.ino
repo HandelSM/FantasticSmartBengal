@@ -176,7 +176,9 @@ void playSoundBlackBox(String text, int delayTimeMs) {
 
   else if (c >= '1' && c <= '9') {
        num = byte(text.substring(0, 2).toInt());
-       playSound10To90(num, delayTimeMs);
+       
+       //A conversão de tipos inteiros para tipos racionais força o programa a converter XY (com X e Y ∈ {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}) para X0.
+       playSound10To90((num/10) * 10, delayTimeMs);
        if ((num % 10) != 0) {
         playSound1To9(num%10, delayTimeMs);
        }
