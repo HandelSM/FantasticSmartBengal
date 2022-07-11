@@ -1,3 +1,5 @@
+#include <DFMiniMp3.h>
+
 #include "DFPlayerMini.h"
 
 #define BUSYPIN 7
@@ -6,10 +8,7 @@
 
 DFPlayerMini player;
 
-void setup() {
-  player.init(BUSYPIN, TXPIN, RXPIN, NULL);
-  Serial.begin(9600);
-}
+
 
 void playSound10To90(byte num, int delayTimeMs = 0) {
   if (num != 10) {
@@ -189,15 +188,25 @@ void playSoundBlackBox(String text, int delayTimeMs) {
   }
 }
 
+void setup() {
+  //player.init(BUSYPIN, TXPIN, RXPIN, NULL);
+  Serial.begin(9600);
+
+  Serial.print("test");
+}
+
 void loop() {
+  /*
   String v[] = {"1.9", "2.30", "20.50", "22.55", "12.17", "1", "2", "O"};
   int i;
   int size1;
 
   size1 = sizeof(v)/sizeof(String);
- 
+
+  Serial.print(size1);
+  
   for (i = 0; i < size1; i++) {
     playSound(v[i], 1000);
-  }
+  }*/
   
 }
