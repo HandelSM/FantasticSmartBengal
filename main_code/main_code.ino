@@ -1,8 +1,8 @@
 #include<GFButton.h>
-//#include <MD_TCS230.h>
-//#include <FreqCount.h>
-//#include "ColorMatch.h"
-//#include "player_mini.h"
+#include <MD_TCS230.h>
+#include <FreqCount.h>
+#include "ColorMatch.h"
+#include "player_mini.h"
 
 #define BUSYPIN 7
 #define RXPIN 12
@@ -24,11 +24,12 @@ int trigPin = 11;
 int echoPin = 10;
 
 //Sensor de cor
-//MD_TCS230 CS(s2, s3, s0, s1, OE);
+MD_TCS230 CS(s2, s3, s0, s1, OE);
 
 // Global variables
 //colorData  rgb;
 int estadoCampainha = LOW;
+DFPlayerMini player;
 
 long previousMillis = 0; // will store time between colors
 int last_i = -1; // previos color index
@@ -79,7 +80,7 @@ void acionaSensorDistancia()
 
 
 //Funções sensor cor
-/*
+
 void color()
 {
   digitalWrite(s2, LOW);
@@ -147,8 +148,6 @@ uint8_t colorMatch(colorData *rgb)
   return (minI);
 }
 
-*/
-
 String getColorCode(String cor)
 {
   String code;
@@ -199,12 +198,12 @@ void buttonFunction() //AÇÃO DO BOTÃO
 
     case 1: //funcao detector de cor
       Serial.println("Lendo cor");
-      /*
+      
       String cor = getCor();
       Serial.println(a);
       String colorCode = getColorCode(cor);
       playSound(player, colorCode, 10);
-      */
+      
       break;
 
     case 2: //funcao detector de objetos - fala a distancia do objeto (playsound)
@@ -237,19 +236,19 @@ void buttonFunctionSwitch() //TROCA FUNCIONALIDADE
   {
     case 0:
       Serial.println("Modo sonar");
-      //playSound(player, "S", 10);
+      playSound(player, "S", 10);
       break;
     case 1:
       Serial.println("Modo cor");
-      //playSound(player, "C", 10);
+      playSound(player, "C", 10);
       break;
     case 2:
       Serial.println("Modo distância");
-      //playSound(player, "D", 10);
+      playSound(player, "D", 10);
       break;
     case 3:
       Serial.println("Modo desligado");
-      //playSound(player, "P", 10);
+      playSound(player, "P", 10);
       break;  
   }
   
@@ -273,9 +272,9 @@ float getDist()
 void setup()
 {
   Serial.begin(9600);
-  //player.init(BUSYPIN, TXPIN, RXPIN, NULL);
+  player.init(BUSYPIN, TXPIN, RXPIN, NULL);
 
-  /*
+  
   //INICIO DO SETUP DO SENSOR VL
   Wire.begin();
   sensor.init();
@@ -291,7 +290,7 @@ void setup()
   //oscilação com esse codigo vai para +-6mm em longo alcance
   sensor.setMeasurementTimingBudget(200000);
   // FIM SETUP DO SENSOR VL
-  */
+  
 
   //CAMPAINHA
   pinMode(campainha, OUTPUT);
@@ -299,7 +298,7 @@ void setup()
   button.setPressHandler(buttonFunction);
   button.setClicksHandler(buttonFunctionSwitch);
 
-/*
+
   //INICIO SETUP SENSOR DE COR
   CS.begin();
   // CALIBRACAO DO SENSOR DE COR
@@ -313,7 +312,7 @@ void setup()
   digitalWrite(s0, HIGH);
   digitalWrite(s1, HIGH);
   //FIM SETUP SENSOR DE COR
-*/
+
 
   //INICIO SETUP SENSOR DISTANCIA
   pinMode(trigPin, OUTPUT);
@@ -347,7 +346,7 @@ void loop()
   }
   else if(state == 1)
   {
-    /*
+    
     //definição de cor
     color();
     Serial.print("   ");
@@ -374,19 +373,19 @@ void loop()
     {
       Serial.println("  ");
     }
-    */
+    
   }
 
   delay(10);
 
   //Cores RGB
-  /*
+  
   static uint8_t  runState = 0;
   static uint8_t  readState = 0;
   i = -1;
 
   unsigned long currentMillis = millis();
-
+V
   // Matching mode
   switch (runState) 
   {
@@ -413,5 +412,5 @@ void loop()
       runState = 0; // start again if we get here as something is wrong
   }
 
-  */
+  
 }
