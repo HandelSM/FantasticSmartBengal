@@ -1,15 +1,24 @@
-#include<VL53L0X.h>
-#include<GFButton.h>
 #include <MD_TCS230.h>
 #include "ColorMatch.h"
 
 // Pin definitions
+/*
 const int s0 = 4;  
 const int s1 = 3;  
 const int s2 = 41;  
 const int s3 = 43;  
 const int out = 47;
 const int OE = 2;
+*/
+
+const int s0 = 4;
+const int s1 = 3;
+const int s2 = 5;
+const int s3 = 6;
+const int out = 1;
+const int OE = 2;
+
+
 int vermelho = 0;  
 int verde = 0;  
 int azul = 0;  
@@ -23,8 +32,7 @@ long previousMillis = 0;        // will store time between colors
 int last_i = -1; // previos color index
 
 //DECLARAÇÕES
-VL53L0X sensor;
-GFButton botaoSensor(A0);
+
 bool sensorDistancia;
 unsigned long instanteAnterior = 0;
 unsigned long instanteAnterior2 = 0;
@@ -33,11 +41,6 @@ int campainha = 12;
 
 void setup() {
   Serial.begin(9600); 
-  Wire.begin();
-  sensor.init();
-  sensor.setTimeout(500);
-  sensorDistancia = false;
-  pinMode(campainha, OUTPUT);
 
   // initialise color sensor
   CS.begin();
@@ -53,41 +56,12 @@ void setup() {
   pinMode(out,INPUT);   
   digitalWrite(s0,HIGH);  
   digitalWrite(s1,HIGH);
-
-  //codigo para medir longas distancias (sem ele só chega a 100 cm)
-  sensor.setSignalRateLimit(0.1);
-  sensor.setVcselPulsePeriod(VL53L0X::VcselPeriodPreRange, 18);
-  sensor.setVcselPulsePeriod(VL53L0X::VcselPeriodFinalRange, 14);
-
-  //codigo para habilitar alta acurácia
-  //oscilação com esse codigo vai para +-6mm em longo alcance
-  sensor.setMeasurementTimingBudget(200000);
-
-  botaoSensor.setPressHandler(acionaSensorDistancia);
 }
 
 void loop() {
-  unsigned long dist = sensor.readRangeSingleMillimeters(); //distancia está vindo em mm
-  botaoSensor.process();
-  
-  unsigned long instanteAtual = millis();
-  unsigned long instanteAtual2 = millis();
-
-  if (instanteAtual2 > instanteAnterior2 + 250) {
-    Serial.print("Distância: ");
-    Serial.println(dist);
-    instanteAnterior2 = instanteAtual2;
-    var = dist * 3;
-  }
-
-  if (instanteAtual > instanteAnterior + var and sensorDistancia == true) {
-    tone(campainha, 220, 50);
-    instanteAnterior = instanteAtual;
-  }
-
 
   //definição de cor
-    color(); 
+  color(); 
   Serial.print("   ");  
   Serial.print(vermelho, DEC);  
   Serial.print("   ");  
@@ -111,9 +85,7 @@ void loop() {
   else{
   Serial.println("  ");  
   }
-  delay(900);    
-
-
+  delay(900);
 
   //Cores RGB
   static uint8_t  runState = 0;   
@@ -145,17 +117,6 @@ void loop() {
 
     default:
       runState = 0; // start again if we get here as something is wrong
-  }
-}
-
-void acionaSensorDistancia(GFButton& botaoSensor) {
-  if (sensorDistancia == false) {
-    sensorDistancia = true;
-    Serial.println("Sensor ligado");
-  }
-  else {
-    sensorDistancia = false;
-    Serial.println("Sensor desligado");
   }
 }
 
