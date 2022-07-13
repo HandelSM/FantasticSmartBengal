@@ -13,7 +13,7 @@ const int s0 = 4;
 const int s1 = 3;
 const int s2 = 5;
 const int s3 = 6;
-const int out = 1;
+const int out = 10;
 const int OE = 2;
 int vermelho = 0;
 int verde = 0;
@@ -21,15 +21,14 @@ int azul = 0;
 
 //Sensor de distancia
 int trigPin = 11;
-int echoPin = 10;
+int echoPin = A5;
 
 //Sensor de cor
 MD_TCS230 CS(s2, s3, s0, s1, OE);
 
 // Global variables
-//colorData  rgb;
+colorData  rgb;
 int estadoCampainha = LOW;
-DFPlayerMini player;
 
 long previousMillis = 0; // will store time between colors
 int last_i = -1; // previos color index
@@ -44,7 +43,7 @@ unsigned long instanteAtual2 = millis();
 
 int campainha = 9;
 int state = 0;
-//DFPlayerMini player;
+DFPlayerMini player;
 
 unsigned long lastTone = millis();
 int freq = 0;
@@ -91,7 +90,6 @@ void color()
   digitalWrite(s2, HIGH);
   verde = pulseIn(out, digitalRead(out) == HIGH ? LOW : HIGH);
 }
-
 uint8_t fsmReadValue(uint8_t state) 
 {
   // Finite State Machine for reading a value from the sensor
@@ -102,22 +100,18 @@ uint8_t fsmReadValue(uint8_t state)
       CS.read();
       state++;
       break;
-
     case 1: // wait for a read to complete
       if (CS.available()) {
         CS.getRGB(&rgb);
         state++;
       }
       break;
-
     default:  // reset fsm
       state = 0;
       break;
   }
-
   return (state);
 }
-
 uint8_t colorMatch(colorData *rgb) 
 {
   // Root mean square distance between the color and colors in the table.
@@ -129,7 +123,6 @@ uint8_t colorMatch(colorData *rgb)
   int32_t   d;
   uint32_t  v, minV = 999999L;
   uint8_t   minI;
-
   for (uint8_t i = 0; i < ARRAY_SIZE(ct); i++) 
   {
     v = 0;
@@ -144,14 +137,14 @@ uint8_t colorMatch(colorData *rgb)
     if (v == 0)   // perfect match, no need to search more
       break;
   }
-
   return (minI);
 }
+
 
 String getColorCode(String cor)
 {
   String code;
-  
+
   if (cor.compareTo("WHITE") == 0)
   {
     code = "b";
@@ -198,12 +191,12 @@ void buttonFunction() //AÇÃO DO BOTÃO
 
     case 1: //funcao detector de cor
       Serial.println("Lendo cor");
-      
+      /*
       String cor = getCor();
       Serial.println(a);
       String colorCode = getColorCode(cor);
       playSound(player, colorCode, 10);
-      
+      */
       break;
 
     case 2: //funcao detector de objetos - fala a distancia do objeto (playsound)
@@ -226,7 +219,7 @@ void buttonFunctionSwitch() //TROCA FUNCIONALIDADE
 {
   Serial.println("switch mode");
   state++;
-  
+
   if (state == 4)
   {
     state = 0;
@@ -236,22 +229,22 @@ void buttonFunctionSwitch() //TROCA FUNCIONALIDADE
   {
     case 0:
       Serial.println("Modo sonar");
-      playSound(player, "S", 10);
+      //playSound(player, "S", 10);
       break;
     case 1:
       Serial.println("Modo cor");
-      playSound(player, "C", 10);
+      //playSound(player, "C", 10);
       break;
     case 2:
       Serial.println("Modo distância");
-      playSound(player, "D", 10);
+      //playSound(player, "D", 10);
       break;
     case 3:
       Serial.println("Modo desligado");
-      playSound(player, "P", 10);
+      //playSound(player, "P", 10);
       break;  
   }
-  
+
   Serial.println(state);
 }
 
@@ -274,23 +267,23 @@ void setup()
   Serial.begin(9600);
   player.init(BUSYPIN, TXPIN, RXPIN, NULL);
 
-  
+  Serial.println("Inicio do programa");
+
+  /*
   //INICIO DO SETUP DO SENSOR VL
   Wire.begin();
   sensor.init();
   sensor.setTimeout(500);
   sensorDistancia = false;
-
   //codigo para medir longas distancias (sem ele só chega a 100 cm)
   sensor.setSignalRateLimit(0.1);
   sensor.setVcselPulsePeriod(VL53L0X::VcselPeriodPreRange, 18);
   sensor.setVcselPulsePeriod(VL53L0X::VcselPeriodFinalRange, 14);
-
   //codigo para habilitar alta acurácia
   //oscilação com esse codigo vai para +-6mm em longo alcance
   sensor.setMeasurementTimingBudget(200000);
   // FIM SETUP DO SENSOR VL
-  
+  */
 
   //CAMPAINHA
   pinMode(campainha, OUTPUT);
@@ -341,7 +334,7 @@ void loop()
     {
       estadoCampainha = LOW;
     }
-    
+
     digitalWrite(campainha, estadoCampainha);
   }
   else if(state == 1)
@@ -379,13 +372,11 @@ void loop()
   delay(10);
 
   //Cores RGB
-  
+  /*
   static uint8_t  runState = 0;
   static uint8_t  readState = 0;
   i = -1;
-
   unsigned long currentMillis = millis();
-V
   // Matching mode
   switch (runState) 
   {
@@ -393,7 +384,6 @@ V
       readState = fsmReadValue(readState);
       if (readState == 0) runState++;
       break;
-
     case 1: // find the matching color
       i = colorMatch(&rgb);
       Serial.print(i); Serial.print(" ");
@@ -407,10 +397,8 @@ V
       Serial.println(ct[i].name);
       runState++;
       break;
-
     default:
       runState = 0; // start again if we get here as something is wrong
   }
-
-  
+  */
 }
